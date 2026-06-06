@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import auth, suppliers, inventory, products, warehouses, simulations
-import subprocess, os
 
 app = FastAPI(
     title="Supply Chain Risk Simulation Platform",
@@ -9,18 +8,9 @@ app = FastAPI(
     version="1.0.0",
 )
 
-@app.on_event("startup")
-def run_migrations():
-    """Auto-run Alembic migrations on startup."""
-    try:
-        subprocess.run(["alembic", "upgrade", "head"], check=True)
-        print("✅ Database migrations applied")
-    except Exception as e:
-        print(f"⚠️ Migration warning: {e}")
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Will restrict after we get frontend URL
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
