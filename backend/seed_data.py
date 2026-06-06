@@ -10,7 +10,7 @@ BASE = "http://localhost:8000"
 # ── 1. Login ──────────────────────────────────────────────────────────────────
 print("🔐 Logging in...")
 res = requests.post(f"{BASE}/auth/login",
-    data={"username": "admin@supplychain.com", "password": "admin123"})
+    data={"username": "seed@supplychain.com", "password": "seed123"})
 token = res.json()["access_token"]
 H = {"Authorization": f"Bearer {token}"}
 print("   ✅ Logged in")

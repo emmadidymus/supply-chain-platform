@@ -1,19 +1,14 @@
 # Python
-__pycache__/
-*.pyc
-*.pyo
-venv/
-.env
-*.egg-info/
+backend/venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/*.pyc
+backend/.env
 
 # Node
-node_modules/
-dist/
-.env.local
+frontend/node_modules/
+frontend/dist/
 
-# Docker
-pgdata/
-
-# OS
+# General
 .DS_Store
 *.log
