@@ -1,117 +1,204 @@
 # Supply Chain Risk Simulation Platform
 
-A full-stack decision-support system that models supply chain resilience under uncertainty using Monte Carlo simulation.
+A full-stack decision-support system that helps organizations evaluate supply chain resilience under uncertain conditions using Monte Carlo simulation.
 
-![Dashboard](https://img.shields.io/badge/status-live-brightgreen) ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688) ![React](https://img.shields.io/badge/React-18-61DAFB) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-336791)
+![Platform](https://img.shields.io/badge/FastAPI-0.111-green) ![React](https://img.shields.io/badge/React-18-blue) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue) ![Python](https://img.shields.io/badge/Python-3.11-yellow)
 
-## Live Demo
-- **Frontend:** (add after deploy)
-- **API Docs:** (add after deploy)
+---
 
-## Features
+## What It Does
 
-- **Monte Carlo Engine** — runs 10,000+ probabilistic iterations modeling supplier failures, demand surges, and shipping delays
-- **Risk Dashboard** — real-time KPIs: service level probability, risk exposure score, expected shortage cost
-- **Supplier Management** — computed risk scores combining failure probability, reliability, and lead time
-- **Inventory Health** — stockout risk classification (critical / high / medium / low) with days-of-stock tracking
-- **Scenario Analysis** — compare baseline vs. disruption scenarios side by side
-- **JWT Authentication** — role-based access (admin, manager, analyst)
+- **Supplier Risk Assessment** — scores each supplier based on reliability, lead time, and failure probability
+- **Inventory Health Monitoring** — tracks days of stock remaining and stockout risk levels
+- **Monte Carlo Simulation** — runs 10,000+ iterations to model supplier failures, demand surges, and shipping delays
+- **Scenario Analysis** — compares outcomes across disruption scenarios (supplier failure, demand spike, port congestion)
+- **Risk Dashboard** — visualizes fulfillment probabilities, risk exposure scores, and expected shortage costs
+
+---
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Backend | Python, FastAPI, SQLAlchemy, Alembic |
-| Simulation | NumPy, SciPy |
-| Database | PostgreSQL |
-| Frontend | React, Vite, Recharts, React Router |
-| Auth | JWT (python-jose, bcrypt) |
-| Dev | Docker Compose |
+| Backend API | Python, FastAPI, JWT Auth |
+| Database | PostgreSQL, SQLAlchemy, Alembic |
+| Simulation Engine | NumPy, Monte Carlo |
+| Frontend | React, Vite, Recharts |
+| Infrastructure | Docker, Docker Compose |
 
-## Architecture
-supply-chain-platform/
-├── backend/
-│   ├── app/
-│   │   ├── main.py              # FastAPI entry point
-│   │   ├── database.py          # DB connection
-│   │   ├── models/              # SQLAlchemy models
-│   │   ├── schemas/             # Pydantic schemas
-│   │   ├── routers/             # API endpoints
-│   │   ├── simulation/          # Monte Carlo engine
-│   │   └── auth/                # JWT logic
-│   └── alembic/                 # DB migrations
-└── frontend/
-└── src/
-├── pages/               # Dashboard, Suppliers, Inventory, Simulations
-├── components/          # Layout, shared UI
-└── api/                 # Axios client + endpoints
+---
 
-## Local Development
+## Running Locally
 
 ### Prerequisites
+
 - Python 3.11+
 - Node.js 18+
-- Docker Desktop
+- Docker Desktop (for PostgreSQL)
 
-### Setup
+### 1. Clone the repository
 
 ```bash
-# Clone
-git clone https://github.com/YOUR_USERNAME/supply-chain-platform.git
+git clone https://github.com/emmanueldidymus/supply-chain-platform.git
 cd supply-chain-platform
+```
 
-# Start database
+### 2. Start the database
+
+```bash
 docker compose up db -d
+```
 
-# Backend
+### 3. Set up the backend
+
+```bash
 cd backend
 python3.11 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-alembic upgrade head
-uvicorn app.main:app --reload --port 8000
+source venv/bin/activate        # Mac/Linux
+# venv\Scripts\activate         # Windows
 
-# Frontend (new terminal)
+pip install -r requirements.txt
+pip install bcrypt==4.0.1       # Pin for passlib compatibility
+```
+
+Create a `.env` file in the `backend/` folder:
+
+```env
+DATABASE_URL=postgresql://scuser:scpassword@localhost:5432/supplychain
+SECRET_KEY=supersecretkey123
+ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+```
+
+Run database migrations:
+
+```bash
+alembic upgrade head
+```
+
+Start the API server:
+
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+API docs available at: **http://localhost:8000/docs**
+
+### 4. Set up the frontend
+
+Open a new terminal tab:
+
+```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-Open http://localhost:5173
+Frontend available at: **http://localhost:5173**
 
-### Seed sample data
+### 5. Create an account and seed sample data
+
+First register an admin user at **http://localhost:8000/docs** → `POST /auth/register`:
+
+```json
+{
+  "email": "admin@supplychain.com",
+  "full_name": "Admin User",
+  "password": "admin123",
+  "role": "admin"
+}
+```
+
+Then seed the database with realistic sample data:
 
 ```bash
 cd backend
-source venv/bin/activate
 pip install requests
 python seed_data.py
 ```
 
-## API Documentation
+This creates:
+- 8 global suppliers with risk scores
+- 5 warehouses across 4 continents
+- 10 products
+- 17 inventory records (including critical/high risk items)
+- 1 Monte Carlo simulation with 3 scenarios
 
-Interactive docs available at `http://localhost:8000/docs` when running locally.
+---
 
-Key endpoints:
-- `POST /auth/register` — create account
-- `POST /auth/login` — get JWT token
-- `GET /suppliers/` — list suppliers with computed risk scores
-- `GET /inventory/` — inventory with stockout risk classification
-- `POST /simulations/run` — launch Monte Carlo simulation (async)
-- `GET /simulations/{id}` — poll simulation status and results
+## Project Structure
+supply-chain-platform/
+├── backend/
+│   ├── app/
+│   │   ├── models/          # SQLAlchemy database models
+│   │   ├── schemas/         # Pydantic request/response schemas
+│   │   ├── routers/         # FastAPI route handlers
+│   │   ├── simulation/      # Monte Carlo engine
+│   │   ├── auth/            # JWT authentication
+│   │   ├── database.py      # DB connection
+│   │   └── main.py          # FastAPI entry point
+│   ├── alembic/             # Database migrations
+│   ├── seed_data.py         # Sample data script
+│   └── requirements.txt
+├── frontend/
+│   └── src/
+│       ├── pages/           # Dashboard, Suppliers, Inventory, Simulations
+│       ├── components/      # Layout, shared components
+│       └── api/             # Axios API client
+└── docker-compose.yml
 
-## Simulation Engine
+---
 
-The Monte Carlo engine (`backend/app/simulation/engine.py`) runs N iterations where each iteration:
+## API Endpoints
 
-1. Randomly determines supplier failures based on `failure_probability`
-2. Samples demand from a normal distribution (±30% variance)
-3. Applies route delays based on `risk_score`
-4. Computes whether demand can be fulfilled
-5. Classifies outcome: on-time / shortage / severe disruption
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/auth/register` | Create user account |
+| POST | `/auth/login` | Get JWT token |
+| GET/POST | `/suppliers/` | List / create suppliers |
+| GET/POST | `/inventory/` | List / create inventory |
+| GET/POST | `/products/` | List / create products |
+| GET/POST | `/warehouses/` | List / create warehouses |
+| POST | `/simulations/run` | Run Monte Carlo simulation |
+| GET | `/simulations/{id}` | Get simulation results |
 
-Output metrics include `on_time_probability`, `service_level`, `risk_exposure_score`, and `expected_shortage_cost_usd`.
+---
 
-## Author
+## Key Features
 
-Emmanuel Didymus — [GitHub](https://github.com/emmadidymus) | [LinkedIn](https://linkedin.com/in/YOUR_PROFILE)
+### Monte Carlo Simulation Engine
+
+Runs thousands of probabilistic iterations modelling:
+- Random supplier shutdowns based on failure probability
+- Demand variability (normal distribution, ±30%)
+- Shipping delays based on route risk scores
+- Multi-disruption combined scenarios
+
+**Sample output from 10,000 iterations:**
+On-time fulfillment:      72%
+Moderate shortage:        18%
+Severe disruption:        10%
+Service level:            81%
+Risk exposure score:      13.2/100
+Expected shortage cost:   $4,250
+
+### Supplier Risk Scoring
+
+Each supplier is scored 0–1 based on:
+risk = (failure_probability × 0.5) + (1 - reliability × 0.3) + (lead_time / 90 × 0.2)
+
+---
+
+## Screenshots
+
+> Login → Dashboard → Suppliers → Inventory → Simulations
+
+The platform includes a dark sidebar navigation, risk heatmaps, pie charts for fulfillment probability distribution, horizontal bar charts for supplier risk ranking, and inventory health cards with color-coded risk levels.
+
+---
+
+## Built By
+
+Emmanuel Didymus — Engineering Management Portfolio Project
+
+Demonstrates: systems thinking, quantitative risk analysis, full-stack development, operations management, data-driven decision making.
