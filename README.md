@@ -197,8 +197,4 @@ The platform includes a dark sidebar navigation, risk heatmaps, pie charts for f
 
 ---
 
-## Built By
-
-Emmanuel Didymus — Engineering Management Portfolio Project
-
-Demonstrates: systems thinking, quantitative risk analysis, full-stack development, operations management, data-driven decision making.
+## Built By Emmanuel Didymus Sebastian
