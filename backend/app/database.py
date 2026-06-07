@@ -8,16 +8,13 @@ load_dotenv()
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://scuser:scpassword@localhost:5432/supplychain")
 
-# Engine = the actual connection to PostgreSQL
+# Railway uses postgres:// but SQLAlchemy needs postgresql://
+DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
 engine = create_engine(DATABASE_URL)
-
-# SessionLocal = a factory that creates DB sessions (like temporary workspaces)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-# Base = the parent class all our models will inherit from
 Base = declarative_base()
 
-# Dependency: gives each API request its own DB session, then closes it when done
 def get_db():
     db = SessionLocal()
     try:

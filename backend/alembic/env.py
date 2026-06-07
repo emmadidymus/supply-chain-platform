@@ -3,17 +3,24 @@ from sqlalchemy import engine_from_config, pool
 from alembic import context
 import sys, os
 
-# Add backend/app to Python path so imports work
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app.database import Base
-from app.models import *  # Import ALL models so Alembic sees them
+from app.models import *
 
 config = context.config
+
+# Override sqlalchemy.url with DATABASE_URL environment variable
+database_url = os.environ.get("DATABASE_URL")
+if database_url:
+    # Railway uses postgres:// but SQLAlchemy needs postgresql://
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+    config.set_main_option("sqlalchemy.url", database_url)
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-target_metadata = Base.metadata  # Tells Alembic which tables to manage
+target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
