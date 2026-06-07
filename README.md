@@ -4,6 +4,9 @@ A full-stack decision-support system that helps organizations evaluate supply ch
 
 ![Platform](https://img.shields.io/badge/FastAPI-0.111-green) ![React](https://img.shields.io/badge/React-18-blue) ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-blue) ![Python](https://img.shields.io/badge/Python-3.11-yellow)
 
+<img width="1470" height="956" alt="Screenshot 2026-06-07 at 12 37 32 PM" src="https://github.com/user-attachments/assets/b1991d17-9561-4107-85c1-5219b5329d54" />
+
+
 ---
 
 ## What It Does
@@ -194,6 +197,14 @@ risk = (failure_probability × 0.5) + (1 - reliability × 0.3) + (lead_time / 90
 > Login → Dashboard → Suppliers → Inventory → Simulations
 
 The platform includes a dark sidebar navigation, risk heatmaps, pie charts for fulfillment probability distribution, horizontal bar charts for supplier risk ranking, and inventory health cards with color-coded risk levels.
+<img width="1470" height="956" alt="Screenshot 2026-06-07 at 12 37 32 PM" src="https://github.com/user-attachments/assets/6ba907c7-6e3a-425f-9e2a-a776dbf41d54" />
+<img width="1470" height="956" alt="Screenshot 2026-06-07 at 12 37 52 PM" src="https://github.com/user-attachments/assets/35bd0b1f-f4fe-4212-8c0f-456ceb977ce5" />
+<img width="1470" height="956" alt="Screenshot 2026-06-07 at 12 37 57 PM" src="https://github.com/user-attachments/assets/0e6bbfcf-bead-40b4-a5e0-7631e0efb524" />
+<img width="1470" height="956" alt="Screenshot 2026-06-07 at 12 38 09 PM" src="https://github.com/user-attachments/assets/ebfdc9a4-9100-42c8-964f-0d0486a23573" />
+
+
+
+
 
 ---
 
